@@ -36,51 +36,51 @@ def play():
     grid = [[random.choice(symbols) for _ in range(columns)] for _ in range(rows)]
 
     # Define a few pay lines using (row, column) coordinates
-    pay_lines = [
+    pay_lines = {
         # Straght across
-        [(0, 0), (0, 1), (0, 2)],  # line 1
-        [(1, 0), (1, 1), (1, 2)],  # line 2
-        [(2, 0), (2, 1), (2, 2)],  # line 3
-        [(3, 0), (3, 1), (3, 2)],  # line 4
-        [(4, 0), (4, 1), (4, 2)],  # line 5
+        '1': [[(0, 0), (0, 1), (0, 2)], 1],  # line 1
+        '2': [[(1, 0), (1, 1), (1, 2)], 1],  # line 2
+        '3': [[(2, 0), (2, 1), (2, 2)], 1], # line 3
+        '4': [[(3, 0), (3, 1), (3, 2)], 1], # line 4
+        '5': [[(4, 0), (4, 1), (4, 2)], 1], # line 5
 
-        [(0, 0), (0, 1), (0, 2), (0, 3)], # line 6
-        [(1, 0), (1, 1), (1, 2), (1, 3)], # line 7
-        [(2, 0), (2, 1), (2, 2), (2, 3)], # line 8 
-        [(3, 0), (3, 1), (3, 2), (3, 3)], # line 9
-        [(4, 0), (4, 1), (4, 2), (4, 3)], # line 10 
+        '6': [[(0, 0), (0, 1), (0, 2), (0, 3)], 2], # line 6
+        '7': [[(1, 0), (1, 1), (1, 2), (1, 3)], 2], # line 7
+        '8': [[(2, 0), (2, 1), (2, 2), (2, 3)], 2], # line 8 
+        '9': [[(3, 0), (3, 1), (3, 2), (3, 3)], 2], # line 9
+        '10': [[(4, 0), (4, 1), (4, 2), (4, 3)], 2], # line 10 
 
-        [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)],  # line 
-        [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4)],  # line 
-        [(2, 0), (2, 1), (2, 2), (2, 3), (2, 4)],  # line 
-        [(3, 0), (3, 1), (3, 2), (3, 3), (3, 4)],  # line 
-        [(4, 0), (4, 1), (4, 2), (4, 3), (4, 4)],  # line 
+        '11': [[(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)], 3],  # line 
+        '12': [[(1, 0), (1, 1), (1, 2), (1, 3), (1, 4)], 3],  # line 
+        '13': [[(2, 0), (2, 1), (2, 2), (2, 3), (2, 4)], 3],  # line 
+        '14': [[(3, 0), (3, 1), (3, 2), (3, 3), (3, 4)], 3],  # line 
+        '15': [[(4, 0), (4, 1), (4, 2), (4, 3), (4, 4)], 3],  # line 
 
         # Diagonals
-        [(0, 0), (1, 1), (2, 2)],  # line 
-        [(2, 0), (1, 1), (0, 2)],  # line 
+        '16': [[(0, 0), (1, 1), (2, 2)], 1],  # line 
+        '17': [[(2, 0), (1, 1), (0, 2)], 1],  # line 
         
-        [(0, 0), (1, 1), (2, 2), (3, 3)],
-        [(4, 0), (3, 1), (2, 2), (1, 3)],
+        '18': [[(0, 0), (1, 1), (2, 2), (3, 3)], 2],
+        '19': [[(4, 0), (3, 1), (2, 2), (1, 3)], 2],
 
-        [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)],  # line 
-        [(4, 0), (3, 1), (2, 2), (1, 3), (0, 4)],  # line 
+        '20': [[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)], 3],  # line 
+        '21': [[(4, 0), (3, 1), (2, 2), (1, 3), (0, 4)], 3],  # line 
     
-    ]
+    }
 
     def calc_pay(symbol, count):
-        count = 1
+        
         paid = char_pay[symbol] * count
         return paid
 
     def check_payout(grid):
-        lineNum = 0
+        
         paid = 0
-        for pay_line in pay_lines:
-            lineNum = lineNum + 1
+        for lineNum, line_data in pay_lines.items():
+            pay_line, multiplier = line_data
             symbols_on_line = [grid[row][col] for (row, col) in pay_line]
             if len(set(symbols_on_line)) == 1:  # All symbols on the line are the same
-                linepay = calc_pay(symbols_on_line[0], linenum)
+                linepay = calc_pay(symbols_on_line[0], multiplier)
                 paid = paid + linepay
                 print(
                     f"Payout! You got a winning line with the symbol {symbols_on_line[0]} with line {lineNum}. Pays ${linepay}"
