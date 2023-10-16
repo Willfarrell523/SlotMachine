@@ -31,8 +31,8 @@ print("Chosen Symbol: ", random_char)
 
 
 def play():
-    rows = 3
-    columns = 3
+    rows = 5
+    columns = 5
     grid = [[random.choice(symbols) for _ in range(columns)] for _ in range(rows)]
 
     # Define a few pay lines using (row, column) coordinates
@@ -41,10 +41,31 @@ def play():
         [(0, 0), (0, 1), (0, 2)],  # line 1
         [(1, 0), (1, 1), (1, 2)],  # line 2
         [(2, 0), (2, 1), (2, 2)],  # line 3
+        [(3, 0), (3, 1), (3, 2)],  # line 4
+        [(4, 0), (4, 1), (4, 2)],  # line 5
+
+        [(0, 0), (0, 1), (0, 2), (0, 3)], # line 6
+        [(1, 0), (1, 1), (1, 2), (1, 3)], # line 7
+        [(2, 0), (2, 1), (2, 2), (2, 3)], # line 8 
+        [(3, 0), (3, 1), (3, 2), (3, 3)], # line 9
+        [(4, 0), (4, 1), (4, 2), (4, 3)], # line 10 
+
+        [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)],  # line 
+        [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4)],  # line 
+        [(2, 0), (2, 1), (2, 2), (2, 3), (2, 4)],  # line 
+        [(3, 0), (3, 1), (3, 2), (3, 3), (3, 4)],  # line 
+        [(4, 0), (4, 1), (4, 2), (4, 3), (4, 4)],  # line 
+
         # Diagonals
-        [(0, 0), (1, 1), (2, 2)],  # line 4
-        [(2, 0), (1, 1), (0, 2)],  # line 5
-        # ... add all other pay lines here
+        [(0, 0), (1, 1), (2, 2)],  # line 
+        [(2, 0), (1, 1), (0, 2)],  # line 
+        
+        [(0, 0), (1, 1), (2, 2), (3, 3)],
+        [(4, 0), (3, 1), (2, 2), (1, 3)],
+
+        [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)],  # line 
+        [(4, 0), (3, 1), (2, 2), (1, 3), (0, 4)],  # line 
+    
     ]
 
     def calc_pay(symbol, count):
@@ -59,13 +80,18 @@ def play():
             lineNum = lineNum + 1
             symbols_on_line = [grid[row][col] for (row, col) in pay_line]
             if len(set(symbols_on_line)) == 1:  # All symbols on the line are the same
-                linepay = calc_pay(symbols_on_line[0], 1)
+                linepay = calc_pay(symbols_on_line[0], linenum)
                 paid = paid + linepay
                 print(
                     f"Payout! You got a winning line with the symbol {symbols_on_line[0]} with line {lineNum}. Pays ${linepay}"
                 )
         print(f"Your total winnings are ${paid}")
 
+  
+  
+  
+  
+  
     def print_grid(grid):
         # Determine the width of each cell
         cell_width = (
