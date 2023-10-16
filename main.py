@@ -73,16 +73,17 @@ def play():
     paid_lines = []
 
     def calc_pay(symbol, multiplier):
+        print (f"multiplier is {multiplier}")
         paid = char_pay[symbol] * multiplier
+
         return paid
 
     def check_payout(grid):
         lineNum = 0
         paid = 0
-        counted_symbols = set()  # Track symbols that have been counted
         counted_coordinates = set()  # Track coordinates that have been counted
 
-        for pay_line_key in pay_lines:
+        for pay_line_key in sorted(pay_lines, key=lambda k: len(pay_lines[k][0]), reverse=True):
             pay_line = pay_lines[pay_line_key][0]
             lineNum += 1
 
@@ -94,22 +95,18 @@ def play():
 
             if len(set(symbols_on_line)) == 1:  # All symbols on the line are the same
                 symbol = symbols_on_line[0]
-
-                # Check if this symbol has already been counted for a longer line
-                if symbol in counted_symbols:
-                    continue
-
-                linepay = calc_pay(symbol, len(pay_line))
+                
+                linepay = calc_pay(symbol, pay_lines[pay_line_key][1])
                 paid += linepay
                 print(
                     f"Payout! You got a winning line with the symbol {symbol} with line {lineNum}. Pays ${linepay}"
                 )
 
-                # Remember this symbol and its coordinates so we don't double-count
-                counted_symbols.add(symbol)
+                # Remember this set of coordinates so we don't double-count smaller overlapping lines
                 counted_coordinates.update(pay_line)
 
         print(f"Your total winnings are ${paid}")
+
 
 
   
