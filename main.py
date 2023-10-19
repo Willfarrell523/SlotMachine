@@ -1,4 +1,6 @@
 import random
+import curses
+
 
 # char_weights = {
 # "10": 20,
@@ -27,12 +29,84 @@ char_pay = {
 symbols = [symbol for symbol, weight in char_weights.items() for _ in range(weight)]
 
 random_char = random.choice(symbols)
-print("Chosen Symbol: ", random_char)
+
+class Balance:
+    def __init__(self, initial_balance=0):
+        self.balance = initial_balance
+    
+    def getBalance(self):
+        return self.balance
+    
+    def deposit(self, amount):
+        self.balance += amount
+    
+    def detract(self, amount):
+        self.balance -= amount
 
 
-def play():
-    rows = 5
-    columns = 5
+
+
+def depositScreen(account):
+    while True:
+        try:
+            print("Please enter the amount you'd like to deposit.")
+            print(f"Your Current balance is: {account.getBalance()}")
+            deposit = int(input("Deposit: $"))
+            account.deposit(deposit)
+            print(f"Deposited: ${deposit}. Your current balance is now: ${account.getBalance()}.")
+            break
+        except ValueError:
+            print("Please enter a valid number.")
+        mainMenu(account)
+    
+
+
+def setup():
+    account = Balance(0)
+    
+    
+    while True:
+        try:
+            print("Welcome to Will's slot machine. Please select the amount you'd like to deposit.")
+            print(f"Your Current balance is: {account.getBalance()}")
+            deposit = int(input("Deposit: $"))
+            account.deposit(deposit)
+            break
+        except ValueError:
+            print("Please enter a valid number.")
+    print(f"Deposited: ${deposit}. Your current balance is now: ${account.getBalance()}.")
+    
+
+    
+
+    mainMenu(account)
+
+def mainMenu(acc):
+    menuItems = ["===============", "*** Please select an option ***", "S: Spin the slot machine", "D: Deposit more", "Q: Quit"]
+    for s in menuItems:
+        print(s + '\n')
+    
+    while True:
+        choice = input("Select[S, D, Q]: ")
+        
+        if choice == 'S' or choice == 's':
+            play(5, 5, acc)
+        elif choice == 'D' or choice == 'd':
+            depositScreen(acc)
+        elif choice == 'Q' or choice == 'q':
+            break
+
+
+
+    
+    
+            
+
+    
+
+def play(row, column, account):
+    rows = row
+    columns = column
     grid = [[random.choice(symbols) for _ in range(columns)] for _ in range(rows)]
 
     # Define a few pay lines using (row, column) coordinates
@@ -73,10 +147,9 @@ def play():
         '26': [[(4, 0), (4, 1), (4, 2)], 1], # line 5
         '27': [[(3, 0), (2, 1), (1, 2)], 1],
         '28': [[(1, 0), (2, 1), (3, 2)], 1],
-        
-
+     
     }
-    
+
 
     def calc_pay(symbol, multiplier):
         print (f"multiplier is {multiplier}")
@@ -84,7 +157,7 @@ def play():
 
         return paid
 
-    def check_payout(grid):
+    def check_payout(grid, acc):
         lineNum = 0
         paid = 0
         counted_coordinates = set()  # Track coordinates that have been counted
@@ -110,10 +183,13 @@ def play():
 
                 # Remember this set of coordinates so we don't double-count smaller overlapping lines
                 counted_coordinates.update(pay_line)
-
+        acc.deposit(paid)
         print(f"Your total winnings are ${paid}")
+        print(f"Your new balance is: ${acc.getBalance()}")
 
-  
+    
+
+    
     def print_grid(grid):
         # Determine the width of each cell
         cell_width = (
@@ -135,8 +211,9 @@ def play():
         print("+" + "-" * border_length + "+")
 
     print("Good luck!")
+    account.detract(1)
     print_grid(grid)
-    check_payout(grid)
+    check_payout(grid, account)
 
+setup()
 
-play()
