@@ -26,24 +26,24 @@ char_pay = {
     "!": 15,
 }
 
-symbols = [symbol for symbol, weight in char_weights.items() for _ in range(weight)]
+symbols = [symbol for symbol, weight in char_weights.items()
+           for _ in range(weight)]
 
 random_char = random.choice(symbols)
+
 
 class Balance:
     def __init__(self, initial_balance=0):
         self.balance = initial_balance
-    
+
     def getBalance(self):
         return self.balance
-    
+
     def deposit(self, amount):
         self.balance += amount
-    
+
     def detract(self, amount):
         self.balance -= amount
-
-
 
 
 def depositScreen(account):
@@ -53,42 +53,43 @@ def depositScreen(account):
             print(f"Your Current balance is: {account.getBalance()}")
             deposit = int(input("Deposit: $"))
             account.deposit(deposit)
-            print(f"Deposited: ${deposit}. Your current balance is now: ${account.getBalance()}.")
+            print(
+                f"Deposited: ${deposit}. Your current balance is now: ${account.getBalance()}.")
             break
         except ValueError:
             print("Please enter a valid number.")
         mainMenu(account)
-    
 
 
 def setup():
     account = Balance(0)
-    
-    
+
     while True:
         try:
-            print("Welcome to Will's slot machine. Please select the amount you'd like to deposit.")
+            print(
+                "Welcome to Will's slot machine. Please select the amount you'd like to deposit.")
             print(f"Your Current balance is: {account.getBalance()}")
             deposit = int(input("Deposit: $"))
             account.deposit(deposit)
             break
         except ValueError:
             print("Please enter a valid number.")
-    print(f"Deposited: ${deposit}. Your current balance is now: ${account.getBalance()}.")
-    
-
-    
+    print(
+        f"Deposited: ${deposit}. Your current balance is now: ${account.getBalance()}.")
 
     mainMenu(account)
 
+
 def mainMenu(acc):
-    menuItems = ["===============", "*** Please select an option ***", "S: Spin the slot machine($5 Spin)", "D: Deposit more", "Q: Quit"]
+    menuItems = ["===============", "*** Please select an option ***",
+                 "S: Spin the slot machine($5 Spin)", "D: Deposit more", "Q: Quit", "*Tip: Enter also spins the machine."]
     for s in menuItems:
         print(s + '\n')
-    
+
     while True:
         choice = input("Select[S, D, Q]: ")
-        
+        if not choice:
+            play(5, 5, acc)
         if choice == 'S' or choice == 's':
             play(5, 5, acc)
         elif choice == 'D' or choice == 'd':
@@ -97,17 +98,11 @@ def mainMenu(acc):
             break
 
 
-
-    
-    
-            
-
-    
-
 def play(row, column, account):
     rows = row
     columns = column
-    grid = [[random.choice(symbols) for _ in range(columns)] for _ in range(rows)]
+    grid = [[random.choice(symbols) for _ in range(columns)]
+            for _ in range(rows)]
 
     # Define a few pay lines using (row, column) coordinates
     pay_lines = {
@@ -119,40 +114,39 @@ def play(row, column, account):
         '5': [[(4, 0), (4, 1), (4, 2), (4, 3), (4, 4)], 3],  # line 15
 
         '6': [[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)], 3],
-        
+
         '7': [[(4, 0), (3, 1), (2, 2), (1, 3), (0, 4)], 3],  # line 21
         '8': [[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)], 3],
 
-        '9': [[(0, 0), (0, 1), (0, 2), (0, 3)], 2], # line 6
-        '10': [[(1, 0), (1, 1), (1, 2), (1, 3)], 2], # line 7
-        '11': [[(2, 0), (2, 1), (2, 2), (2, 3)], 2], # line 8 
-        '12': [[(3, 0), (3, 1), (3, 2), (3, 3)], 2], # line 9
-        '13': [[(4, 0), (4, 1), (4, 2), (4, 3)], 2], # line 10 
-        
-        
-        '14': [[(0, 0), (1, 1), (2, 2), (3, 3)], 2], # line 18 diags
+        '9': [[(0, 0), (0, 1), (0, 2), (0, 3)], 2],  # line 6
+        '10': [[(1, 0), (1, 1), (1, 2), (1, 3)], 2],  # line 7
+        '11': [[(2, 0), (2, 1), (2, 2), (2, 3)], 2],  # line 8
+        '12': [[(3, 0), (3, 1), (3, 2), (3, 3)], 2],  # line 9
+        '13': [[(4, 0), (4, 1), (4, 2), (4, 3)], 2],  # line 10
+
+
+        '14': [[(0, 0), (1, 1), (2, 2), (3, 3)], 2],  # line 18 diags
         '15': [[(1, 0), (2, 1), (3, 2), (4, 3)], 2],  # line  diags
-        '16': [[(4, 0), (3, 1), (2, 2), (1, 3)], 2], # line 19 
-        '17': [[(3, 0), (2, 1), (1, 2), (0, 3)], 2], # line 19 
-        
+        '16': [[(4, 0), (3, 1), (2, 2), (1, 3)], 2],  # line 19
+        '17': [[(3, 0), (2, 1), (1, 2), (0, 3)], 2],  # line 19
+
         '18': [[(0, 0), (1, 1), (2, 2)], 1],  # line 16
         '19': [[(2, 0), (1, 1), (0, 2)], 1],  # line 17
-        '20': [[(2, 0), (3, 1), (4, 2)], 1], 
+        '20': [[(2, 0), (3, 1), (4, 2)], 1],
         '21': [[(2, 0), (1, 1), (0, 2)], 1],
 
-        '22': [[(0, 0), (0, 1), (0, 2)], 1], # line 1
-        '23': [[(1, 0), (1, 1), (1, 2)], 1], # line 2
-        '24': [[(2, 0), (2, 1), (2, 2)], 1], # line 3
-        '25': [[(3, 0), (3, 1), (3, 2)], 1], # line 4
-        '26': [[(4, 0), (4, 1), (4, 2)], 1], # line 5
+        '22': [[(0, 0), (0, 1), (0, 2)], 1],  # line 1
+        '23': [[(1, 0), (1, 1), (1, 2)], 1],  # line 2
+        '24': [[(2, 0), (2, 1), (2, 2)], 1],  # line 3
+        '25': [[(3, 0), (3, 1), (3, 2)], 1],  # line 4
+        '26': [[(4, 0), (4, 1), (4, 2)], 1],  # line 5
         '27': [[(3, 0), (2, 1), (1, 2)], 1],
         '28': [[(1, 0), (2, 1), (3, 2)], 1],
-     
+
     }
 
-
     def calc_pay(symbol, multiplier):
-        print (f"multiplier is {multiplier}")
+        print(f"multiplier is {multiplier}")
         paid = char_pay[symbol] * multiplier
 
         return paid
@@ -174,7 +168,7 @@ def play(row, column, account):
 
             if len(set(symbols_on_line)) == 1:  # All symbols on the line are the same
                 symbol = symbols_on_line[0]
-                
+
                 linepay = calc_pay(symbol, pay_lines[pay_line_key][1])
                 paid += linepay
                 print(
@@ -187,9 +181,6 @@ def play(row, column, account):
         print(f"Your total winnings are ${paid}")
         print(f"Your new balance is: ${acc.getBalance()}")
 
-    
-
-    
     def print_grid(grid):
         # Determine the width of each cell
         cell_width = (
@@ -215,5 +206,5 @@ def play(row, column, account):
     print_grid(grid)
     check_payout(grid, account)
 
-setup()
 
+setup()
