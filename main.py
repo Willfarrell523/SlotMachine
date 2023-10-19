@@ -82,7 +82,7 @@ def setup():
     mainMenu(account)
 
 def mainMenu(acc):
-    menuItems = ["===============", "*** Please select an option ***", "S: Spin the slot machine", "D: Deposit more", "Q: Quit"]
+    menuItems = ["===============", "*** Please select an option ***", "S: Spin the slot machine($5 Spin)", "D: Deposit more", "Q: Quit"]
     for s in menuItems:
         print(s + '\n')
     
@@ -211,7 +211,7 @@ def play(row, column, account):
         print("+" + "-" * border_length + "+")
 
     print("Good luck!")
-    account.detract(1)
+    account.detract(5)
     print_grid(grid)
     check_payout(grid, account)
 
